@@ -3,7 +3,11 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all
+    page_limit = 2
+    @current_page = params[:page].to_i
+
+    @posts = Post.offset(page_limit*@current_page).limit(page_limit)
+    @next_page = @current_page + 1 if(Post.all.count > page_limit*@current_page + page_limit)
   end
 
   # GET /posts/1 or /posts/1.json
